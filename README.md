@@ -15,4 +15,35 @@ It will be immediately executed on the page load, not on button click. To make i
 onclick={() => onTitleClick(index)}
 ```
 
-5. 
+5. Whenever the setter function in the useState is called, the component reload takes place.
+6. Added dynamic class for active accordion.
+7. 
+
+# The "useEffect" Hook #
+
+1. Allows function components to use something like lifecycle methods
+
+2. We configure the hook to run some code automatically in one of three: 
+
+- When the component is rendered for the first time and whenever it renders.
+
+- When the component is rendered for the first time and whenever it re-renders.
+
+- When the component is rendered for the first time and whenever it renders and some piece of data has changed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
