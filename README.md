@@ -29,16 +29,84 @@ onclick={() => onTitleClick(index)}
 
 - When the component is rendered for the first time and whenever it re-renders.
 
-- When the component is rendered for the first time and whenever it renders and some piece of data has changed.
+- When the component is rendered for the first time and "whenever it re-renders and some piece of data has changed".
+
+Explaination:
+
+3 cases for useEffect second argument:
+
+1. [] 
+
+- it will run at initial render
+
+2. ..nothing..
+
+- Run at initial render
+
+- Run after every re-render
+
+3. [data] 
+
+- Run at initial render
+
+- Run after every re-render if data has changed since last render.
+
+## Import use cases with UseEffect ##
+
+1. We can't use async directly inside useEffect:
+
+```javaScript
+
+useEffect(async () => {
+    await axios.get('https://wiki.com');
+}, [someState]);
+
+```
+
+There are 3 different work arounds for this:
+
+- use helper function inside useEffect:
+
+```javaScript
+
+useEffect( () => {
+    const search = async () => {
+        await axios.get('https://wiki.com');
+    };
+     search();
+}, [someState]);
+
+```
+
+- using iife :
+
+It is more cleaner syntax than the above one.
+
+```javaScript
+
+useEffect( () => {
+    (async () => {
+        await axios.get('https://wiki.com');
+    })();
+}, [someState]);
+
+```
+
+- Using promises :
 
 
+```javaScript
 
+useEffect( () => {
+    axios.get('https://wiki.com')
+        .then((response) => {
+            console.log(response.data);
+        });
+}, [someState]);
 
+```
 
-
-
-
-
+The first approach is the most recommended one. Promises are least recommended.
 
 
 
