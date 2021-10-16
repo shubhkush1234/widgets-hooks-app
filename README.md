@@ -17,7 +17,29 @@ onclick={() => onTitleClick(index)}
 
 5. Whenever the setter function in the useState is called, the component reload takes place.
 6. Added dynamic class for active accordion.
-7. 
+7. Search comonent added with a input element and setting its value to state.
+8. In the useEffect hook, making the api call using axios, 1st param it takes as the domain url, and second it takes the options object. In the second paramameter, we can pass the query params and axios will create a query string/url for us.
+9. Since we are setting the state on onChange event, the API request will be made on every character we type on search btn.  
+10. As we are giving term state an empty string initial value, on the page load it will make the 1st api call with empty string. To avoid it, on e way is to provide some initial search term, other was is that we can write a conditional in useEffect:
+
+```javaScript
+
+if (term){
+    search();
+}
+
+```
+
+11. We'll declare another state for storing the search result which we can later render on screen.
+
+12. 
+
+
+
+
+
+
+
 
 # The "useEffect" Hook #
 
@@ -98,7 +120,7 @@ useEffect( () => {
 ```javaScript
 
 useEffect( () => {
-    axios.get('https://wiki.com')
+    axios.get('https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&origin=*&srsearch=programming')
         .then((response) => {
             console.log(response.data);
         });
