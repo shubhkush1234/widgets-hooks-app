@@ -3,10 +3,10 @@ import axios from 'axios';
 
 const Search = () => {
 
-    const [term, setTerm] = useState('');
+    const [term, setTerm] = useState('programming');
     const [results, setResults] = useState([]);
 
-
+    console.log(results, "results");
     console.log("I run every re rendr")
     useEffect(() => {
         const search = async () => {
@@ -21,12 +21,34 @@ const Search = () => {
                     }
                 }
             );
-            setResults(data);
+            setResults(data.query.search);
         }
         if(term){ // to avoid empty term search request
             search(); 
         }
-    }, [term])
+    }, [term]);
+
+    const renderResults = results.map((result, index) => {
+        return(
+            <div key={result.pageid} className="item">
+                <div className="right floated content">
+                    <a className="ui button" 
+                       href={`https://en.wikipedia.org?curid=${result.pageid}`}
+                    >Go
+                    </a>
+                </div>
+                <div className="item content">
+                    <div className="header">
+                    {result.title}
+                    </div>
+                    <div className="">
+                        <span dangerouslySetInnerHTML={{__html: result.snippet }}></span>
+                    
+                    </div>
+                </div>
+            </div>
+        )
+    })
 
     return (
         <div className="ui form">
@@ -36,6 +58,7 @@ const Search = () => {
                        value={term}
                        onChange={event => setTerm(event.target.value)}/>
             </div>
+            <div className="ui celled list">{renderResults}</div>
         </div>
     )
 }

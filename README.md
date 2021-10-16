@@ -32,7 +32,72 @@ if (term){
 
 11. We'll declare another state for storing the search result which we can later render on screen.
 
-12. 
+12. For rendering the results, we use array.map method and render on screen. Since the "pageid" we're getting from the API result, we can take it as key in the map.
+
+13. We need to show the query.search.snippet, but we are getting it in the form of html, not string. Sample response: 
+
+```json
+
+"query": {
+        "searchinfo": {
+            "totalhits": 562165
+        },
+        "search": [
+            {
+                "ns": 0,
+                "title": "Computer programming",
+                "pageid": 5311,
+                "size": 30472,
+                "wordcount": 3331,
+                "snippet": "Computer <span class=\"searchmatch\">programming</span> <span class=\"searchmatch\">program</span> to accomplish a specific computing result or to perform a",
+                "timestamp": "2021-10-09T21:56:02Z"
+            },
+            {
+                "ns": 0,
+                "title": "Program",
+                "pageid": 23771,
+                "size": 2805,
+                "wordcount": 311,
+                "snippet": "projects Time management <span class=\"searchmatch\">Program</span>, a part of planning <span class=\"searchmatch\">Programming</span> (music), generating music electronically Radio <span class=\"searchmatch\">programming</span>, act of scheduling content",
+                "timestamp": "2021-09-29T06:57:25Z"
+            }
+
+```
+
+There are 2 possible ways we can achieve this:
+
+- By find and replace methods: We can find all the span, classes and other html elements and replace with empty string.
+
+- By rendering snippet as HTML: 
+
+```javaScript
+
+    <span dangerouslySetInnerHTML={{__html: result.snippet }}></span>
+
+```
+
+14. Now, we want user to not only show the page title and description, but also to go to the corresponding wikipedia page. 
+
+```javaScript
+
+<a className="ui button" 
+    href={`https://en.wikipedia.org?curid=${result.pageid}`}
+    >Go
+</a>
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
