@@ -86,9 +86,54 @@ There are 2 possible ways we can achieve this:
 </a>
 
 ```
+15. Now, to implement the delayed request we'll make use of useEffect cleanup function to clear the timer:
 
+```javaScript
 
+    useEffect(() => {
+        const search = async () => {
+            const {data} = await axios.get('https://en.wikipedia.org/w/api.php',
+                {params: {
+                        action: 'query',
+                        list: 'search',
+                        origin: '*',
+                        format:'json',
+                        srsearch: term
+                }});
+            setResults(data.query.search);
+        }
+        const timeoutId = setTimeout(() => {
+            if(term){ // to avoid empty term search request
+                search(); 
+            }}, 5000)
+        return () => { // this is called cleanup function
+            clearTimeout(timeoutId);
+        }
+    }, [term]);
 
+```
+
+It delays/throttles the number of requests. This is called as "debouncing" in javaScript.
+
+Read more in the useEffect cleanup function in my useEfect docs.
+
+16. 1 problem arises here. When we are making the initial request on initial render, the request is delayed by 5000ms due to timer.
+We can add a check to detect when our component is first rendered and make API request immediately:
+
+```javaScript
+
+if(term && !results.length){
+    search();
+} else {
+    const timeoutId = setTimeout(() => {
+        if(term){
+            search();
+        }
+    }, 5000)
+    return () =>
+}
+
+```
 
 
 
@@ -194,6 +239,36 @@ useEffect( () => {
 ```
 
 The first approach is the most recommended one. Promises are least recommended.
+
+3. useEffect cleanup function:
+
+- When we return some function (clean up function) from the useEffect hook, the returned function does not run on initial render. It runs when the state/dependency is changed. On change, it runs before the body of the useEffect runs.
+
+```javaScript
+
+useEffect(() => {
+    console.log("Initial render or term was changed");
+
+    return () => {
+        console.log("CLEAN UP");
+    };
+}, [term]);
+
+// Output on initial render: "Initial render or term was changed"
+// Output on term change: CLEAN UP "Initial render or term was changed"
+
+```
+
+So, in short:
+
+- when the component renders, it runs the body of useEffect, not cleanup.
+
+- When the useEffect runs again, first clean up function runs, then the useEffect body.
+
+
+
+
+
 
 
 

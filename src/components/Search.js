@@ -23,9 +23,20 @@ const Search = () => {
             );
             setResults(data.query.search);
         }
-        if(term){ // to avoid empty term search request
+
+        if(term && !results.length){
             search(); 
+        } else{
+            const timeoutId = setTimeout(() => {
+                if(term){ // to avoid empty term search request
+                    search(); 
+                }
+            }, 5000)
+            return () => {
+                clearTimeout(timeoutId);
+            }
         }
+
     }, [term]);
 
     const renderResults = results.map((result, index) => {
