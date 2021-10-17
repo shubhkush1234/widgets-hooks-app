@@ -130,10 +130,62 @@ if(term && !results.length){
             search();
         }
     }, 5000)
-    return () =>
+    return () => clearTimeout(timeoutId);
 }
 
 ```
+
+17. Implementation for Dropdown:
+
+- Create the options array of objects in app.js :
+
+```javaScript
+
+const options = [
+    {
+        label: 'the color red',
+        value:'red'
+    },
+    {
+        label: 'the color green',
+        value: 'green'
+    }
+]
+
+```
+
+18. pass it to Dropdown component as prop and Map the array there:
+
+```javaScript
+
+    // in app.js
+      <Dropdown  options={options}/>
+
+      // in dropdown component
+      const renderedOptions = props.options.map((option, index) => {
+        return(
+            <div key={option.value} className="item">
+                {option.label}
+            </div>
+        );
+    });
+
+```
+
+Add some jsx to render it in form of a dropdown. This completes basic dropdown.
+
+19. 
+
+
+
+
+
+
+
+
+
+
+
 
 
 
