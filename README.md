@@ -1,3 +1,5 @@
+Stephen grider, 52.5 hrs long course, Udemy
+
 ## Steps: ##
 
 1. added app.js and added accordion component as it's child. App is passing Items array as props to accordion.
@@ -174,14 +176,73 @@ const options = [
 
 Add some jsx to render it in form of a dropdown. This completes basic dropdown.
 
-19. 
+19. We want to make the dropdown re-usable. So, the options, selected value and onchange handlers should come as a prop. Those prop we'll pass from app comp. to dropdown component:
+
+```javaScript
+
+// using the state in app (parent) component
+  const [selected, setSelected] = useState(options[0]);
+
+// passing as prop to dropdown (child) component
+<Dropdown  
+        options={options}
+        selected={selected}
+        onSelectedChange={setSelected}
+        />
+
+```
+20. As we have set the initial value to the "selected" state as options[0], means {label: 'the color red',value:'red'} , we can easily set the default value to dropdown selected text like this:
+
+```javaScript
+
+    <div className="text"> {selected.label}</div>
+
+```
+
+21. Now, we want to (select the dropdown option) or (set the state) of dropdown on user click. So, we need to write eventHandler in Dropdown component like this:
+
+```javaScript
+
+    const renderedOptions = options.map((option) => {
+        return(
+            <div key={option.value}
+                className="item"
+                onClick={() => onSelectedChange(option)}
+                >
+                    {option.label}
+            </div>
+        );
+    });
+
+```
+The on Click, the "onSelectedChange" will pass the current "clicked" value to the parent "app comp." and since it's "selected" state is changed, it will cause re-rendering and the dropdown selected-option will be changed.
+
+This is a classic example of child to parent communication using callback function.
+
+22. We also need to remove the current "selected option" from the deopdown and show it in the "selected" option. To do so, we need to add a condition in the list renderer:
+
+```javaScript
 
 
+    const renderedOptions = options.map((option) => {
+        //newly added condition for removing "selected" option from list
+        if(option.value === selected.value){
+            return null;
+        }
 
+        return(
+            <div key={option.value}
+                className="item"
+                onClick={() => onSelectedChange(option)}
+                >
+                    {option.label}
+            </div>
+        );
+    });
 
+```
 
-
-
+23. We need to close the dropdown as well, once user selects any option from dropdown:
 
 
 
