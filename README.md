@@ -242,7 +242,32 @@ This is a classic example of child to parent communication using callback functi
 
 ```
 
-23. We need to close the dropdown as well, once user selects any option from dropdown:
+23. We need to close/toggle the dropdown as well, once user selects any option from dropdown. One way is to delete the options from list once an option is selected, second is to hide it with css clsses. Using css is preferable:
+
+```javaScript
+
+// write state for open/close
+    const [open, setOpen] = useState(true);
+
+// write dynamic css classes using template strings
+    <div className="ui form">
+        <div className="field">
+            <label className="label"> Select a color</label>
+            <div 
+                onClick={() => setOpen(!open)}
+                className={`ui selection dropdown ${ open ? 'visible active' : ''} `}>
+                <i className="dropdown icon"></i>
+                <div className="text"> {selected.label}</div>
+                <div className={`menu ${open ? 'visible transition' : ''}`}>
+                    {renderedOptions}
+                </div>
+            </div>
+        </div>
+    </div>
+
+```
+
+24. The dropdown is perfect now, but on clicking outside the dropdown, it's not closing. We'll use useRef hook for that.
 
 
 
