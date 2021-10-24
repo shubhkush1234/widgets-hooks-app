@@ -331,6 +331,52 @@ useEffect(() => {
 
 This fixes all the dropdown issues.
 
+27. Now, we want to create a toggle dropdown button which will show/hide the dropdown. So, we'll add it there in App.js component:
+
+```javaScript
+
+const [showDropdown, setshowDropdown] = useState(true); 
+
+// jsx
+
+<button onClick={() => setShowDropdown(!showDropdown)}>Toggle Dropdown</button>
+      { showDropdown ? 
+        <Dropdown  
+          options={options}
+          selected={selected}
+          onSelectedChange={setSelected}
+          /> : "" 
+      }
+
+```
+
+But now, clicking outside the dropdown after toggle-off gives us the error msg : "TypeError: cannot read properties of null( reading contains)" .
+
+This means, when the reference to useRef is removed, the "ref.current" becomes null, i.e "null.contains".
+
+28. It can be fixed by clearing the event-listener after the component is unmounted. Since the useEffect() hook's cleanup function runs during unmounting, we can write code there:
+
+```javaScript
+
+    useEffect(() => {
+        const onBodyClick = (event) => {
+            if(ref.current.contains(event.target)){
+                return;
+            }
+            setOpen(false);
+        }
+        
+        document.body.addEventListener("click", onBodyClick, { capture: true });
+
+        return  () =>{
+            document.body.removeEventListener("click", onBodyClick, { capture: true });
+        } 
+    }, []);
+
+```
+
+Hence, all our dropdown issues are fixed now.
+
 
 
 
@@ -470,6 +516,8 @@ So, in short:
 - when the component renders, it runs the body of useEffect, not cleanup.
 
 - When the useEffect runs again, first clean up function runs, then the useEffect body.
+
+- Also, the cleanup function runs when the component is unmounted.
 
 
 # The "useRef" Hook #
