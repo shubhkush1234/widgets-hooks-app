@@ -267,7 +267,69 @@ This is a classic example of child to parent communication using callback functi
 
 ```
 
-24. The dropdown is perfect now, but on clicking outside the dropdown, it's not closing. We'll use useRef hook for that.
+24. The dropdown is perfect now, but on clicking outside the dropdown, it's not closing. We'll add differentevent listeners for that. 
+
+What we've got so far:
+
+- The dropdown needs to detect a click event on any element besides one it created.
+
+- The dropdown has hard time setting up event handlers on elements that it does not create.
+
+- Event bubbling is a thing.
+
+
+The event listeners which are manually added i.e "document.body.addEventListener" will be called first, and then the React event listeners will be called.
+
+```javaScript
+
+useEffect( () => {
+    document.body.addEventListener("click", () => {
+        setOpen(false);
+    });
+}, []);
+
+```
+
+TIP: To add and check event listener:
+
+- To check the behavious of manually added event listeners, run it in console directly:
+
+```javaScript
+
+document.body.addEventListener("click", () => {
+    console.log("Click Event happened");
+})
+
+//Whenever click event happens, it will be triggered.
+// The event bubbling takes place.
+
+```
+
+25. Till now, the "outside-click" is making the dropdown close, due to body-event-listener. But the dropdown is not closing on selecting any value.
+
+This is because when we clicking the dropdown option, first the body-event-listener is called, which set the open:false, second option-setter event listener is called, third the "setOpen(!open)" written on the dropdown is called, which sets "open: (!false)" i.e true. So, the dropdown doesn't close. 
+
+26. This can be fixed by using useRef() hook. ref.current contains many helper functions to give us control on the particular element where it's placed.
+
+```javaScript
+
+useEffect(() => {
+        document.body.addEventListener("click", (event) => {
+            if(ref.current.contains(event.target)){
+                return;
+            }
+            setOpen(false);
+        },
+        { capture: true }
+        ) 
+    })
+
+    // in the JSX
+    <div ref={ref} className="ui form">
+
+```
+
+This fixes all the dropdown issues.
 
 
 
@@ -275,8 +337,14 @@ This is a classic example of child to parent communication using callback functi
 
 
 
+# Routing #
 
+1. Route Mapping
 
+localhost:3000/ accordion
+localhost:3000/search search
+localhost:3000/dropdown dropdown
+localhost:3000/translate translate
 
 
 
@@ -404,9 +472,9 @@ So, in short:
 - When the useEffect runs again, first clean up function runs, then the useEffect body.
 
 
+# The "useRef" Hook #
 
-
-
+- UseRef allows us to get a reference to a direct DOM element. 
 
 
 
