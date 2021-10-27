@@ -18,7 +18,7 @@ const options= [
 ]
 
 const Translate = () => {
-    const [language, setLanguage] = useState("")
+    const [language, setLanguage] = useState(options[0])
     const [text, setText] = useState('');
     const APIauthKey = "AIzaSyCHUCmpR7cT_yDFHC98CZJy2LTms-IwDlM";
     return (
@@ -27,7 +27,7 @@ const Translate = () => {
             <Dropdown 
                 label="select a language"
                 options={options}
-                selected={options[0]} 
+                selected={language} 
                 onSelectedChange={setLanguage}
             />
             <hr />

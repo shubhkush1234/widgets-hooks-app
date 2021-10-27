@@ -428,6 +428,82 @@ export default Convert;
 <Convert text={text} language={language} />
 ```
 
+31. Set the language and text state in the "translate-component" and pass it to "dropdown-component" and "convert-component" as prop.  
+
+
+32. In the "convert-component", make the API call in the useEffect as:
+
+```javaScript
+
+
+const Convert = ({language, text}) => {
+
+    const [translated, setTranslated]= useState("");
+
+    useEffect( () => {
+
+        const doTranslation = async () => {
+            const { data } = await axios.post(
+                'https://translation.googleapis.com/language/translate/v2',
+                {},
+                {
+                    params: {
+                        q: text,
+                        target: language.value,
+                        key: 'AIzaSyCHUCmpR7cT_yDFHC98CZJy2LTms-IwDlM'
+                    }
+                });
+
+                setTranslated(data.data.translations[0].translatedText);
+            
+        };
+
+        doTranslation(); // always make sure to call
+    }, [language, text]);
+
+    return (
+        <div>
+            <h1 className="ui header">
+                {translated}
+            </h1>
+            
+        </div>
+    )
+}
+export default Convert; 
+
+```
+
+33. We are getting the response but API call is made on every language/Input change. So, we need to debounce the request. For that, we need to write 2nd useEffect() hook:
+
+```javaScript
+
+    useEffect(() => {
+        const timerId = setTimeout(() => {
+            setDebouncedText(text);
+        }, 5000);
+
+        return () => {
+            clearTimeout(timerId);
+        }
+    }, [text])
+
+```
+
+Also, pass the "q" parameter as "debouncedText" instead of "text" done before. Also, update dependency as "debounceedText" instead of "text".
+This completes our translate. Now we'll move to routing. 
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
