@@ -377,8 +377,56 @@ This means, when the reference to useRef is removed, the "ref.current" becomes n
 
 Hence, all our dropdown issues are fixed now.
 
+29. Translate Component:
 
+Now we want to create a "translate-component" which will send options, language n setLanguage props to the dropdown and the "convert-component" will show language-translation.
 
+```javaScript
+
+const options= [
+    {
+        label: 'Afrikaans',
+        value: 'af'
+    },
+    {
+        label: 'Arabic',
+        value: 'ar'
+    },
+    {
+        label: 'Hindi',
+        value: 'hi'
+    }
+]
+
+```
+
+30. The convert-component will receive the "language" and "text" prop and:
+
+- A new value for 'language' or 'text' has appeared, convert it and show the output.
+
+- Make request to google translate API.
+
+- update state with data from response
+
+- Show data from response to screen.
+
+```javaScript
+const Convert = ({language, text}) => {
+
+    useEffect( () => {
+        console.log("New language or text")
+    }, [language, text]);
+
+    return (
+        <div>            
+        </div>
+    )
+}
+export default Convert; 
+
+// Import the convert component in Translate component
+<Convert text={text} language={language} />
+```
 
 
 
