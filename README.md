@@ -507,15 +507,143 @@ This completes our translate. Now we'll move to routing.
 
 
 
-# Routing #
+# Routing: (without React Router) #
 
 1. Route Mapping
 
-localhost:3000/ accordion
-localhost:3000/search search
-localhost:3000/dropdown dropdown
-localhost:3000/translate translate
+- localhost:3000/ accordion
+- localhost:3000/search search
+- localhost:3000/dropdown dropdown
+- localhost:3000/translate translate
 
+2. We can write functions for navigation:
+
+```javaScript
+
+const showAccordion = () => {
+  if(window.location.pathname === '/'){
+    return <Accordion items={items} />
+  }
+};
+
+const showList = () => {
+  if(window.location.pathname === '/list'){
+    return <Search />
+  }
+};
+
+const showDropdownn = () => {
+  if(window.location.pathname === '/dropdown'){
+    return <Dropdown 
+    label="select a color"/>
+  }
+};
+
+const showTranslate = () => {
+  if(window.location.pathname === '/translate'){
+    return <Translate />
+  }
+};
+
+///calling it inside render:
+  return (
+    <div>
+      {showAccordion()}
+      {showList()}
+      {showTranslate()}
+      {showDropdownn()}
+      
+```
+
+3. Instead of writing 4 different functions, we can write 1 function for this:
+
+```javaScript
+
+const showComponent = (route, component) => {
+    return window.location.pathname === route
+        ? component 
+        : null
+};
+
+```
+
+But this is not the react way of doing things.
+
+4. Rather than making some standalone function, We can create a component which will decide which component to show based on current pathName:
+
+```javaScript
+
+// create a Route.js component
+const Route = ({path, children}) => {
+    window.location.pathname === path ? 
+        children : null
+}
+export default Route;
+
+// In the App.js component
+<Route path="/">
+    <Accordion items={items}>
+<Route/>
+
+<Route path="/translate">
+    <Translate />
+<Route/>
+
+<Route path="/dropdown">
+    <Dropdown 
+          options={options}
+          selected={selected}
+          onSelectedChange={setSelected}
+          label="select a color"/>
+</Route>
+<Route path="list">
+    <Search />
+<Route/>
+
+```
+
+5. Implementing header for Navigation:
+
+```javaScript
+
+import React from 'react';
+
+const Header = () => {
+    return(
+        <div className="ui secondary pointing menu">
+            <a href="/" className="item">
+                Accordion
+            </a>
+            <a href="/list" className="item">
+                Search
+            </a>
+            <a href="/dropdown" className="item">
+                Dropdown
+            </a>
+            <a href="/translate" className="item">
+                Translate
+            </a>
+        </div>
+    );
+}
+export default Header;
+
+// Show <Header /> compoent in App.js
+<Header />
+
+```
+
+6. This routing is working perfectly fine. It is not a recommended way as it does the full page reload when link is clicked. We should do it like this:
+
+- User clicks on "List"
+- Change the URL, but you don't do a full page refresh.
+- Each Route could detect the URL has changed.
+- Route could update piece of state tracking the current pathname.
+- Each Route renders, showing/hiding components appropriately.
+
+7. In the "Header" component, we'll write a "Link" component which will execute a "special logic" when user clicks on the link, and prevent the full page reload as well. When user clicks on each of the links, "Navigation Event" is fired and it will be listened all over the routes.
+
+Refer Router and Link for it's implementation.
 
 
 
